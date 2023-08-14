@@ -37,6 +37,14 @@ class ChessAPI_Helper{
 
         return leaderboards
     }
+    public static func getCountryInfo(urlString: String) async throws -> Country {
+       
+        let data = try await fetch(urlString: urlString)
+        let decoder = JSONDecoder()
+        let leaderboards = try decoder.decode(Country.self, from: data)
+
+        return leaderboards
+    }
     
   
     

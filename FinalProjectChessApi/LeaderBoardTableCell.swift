@@ -12,6 +12,27 @@ class LeaderBoardTableCell : UITableViewCell {
     @IBOutlet weak var userImage : UIImageView!
     @IBOutlet weak var userName : UILabel!
     @IBOutlet weak var userScore : UILabel!
+   
+ 
+    @IBOutlet weak var userFav: UIButton!
+    var buttonTappedClosure: (() -> Void)?
+    @IBAction func buttonTapped(_ sender: Any) {
+        buttonTappedClosure?()
+        if userFav.currentImage == UIImage(named: "heart") {
+                    userFav.setImage(UIImage(named: "heart.fill"), for: .normal)
+                } else {
+                    userFav.setImage(UIImage(named: "heart"), for: .normal)
+        }
+    }
+    func configure(with player: Player) {
+            userName.text = player.username
+            userScore.text = "\(player.score)"
+           
+            
+            // ... Configure other cell UI elements ...
+    }
+    
+    
     func displayDogImage(with url: URL) {
         // Perform image loading asynchronously on a global background queue
         DispatchQueue.global().async {

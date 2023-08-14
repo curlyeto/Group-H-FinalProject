@@ -52,7 +52,7 @@ class ViewController: UIViewController,UITableViewDataSource {
         }else{
              user = playerList[indexPath.row]
         }
-       
+        
        
         cell.userName.text=user.username
         if let imageUrl = URL(string: user.avatar) {
@@ -61,7 +61,42 @@ class ViewController: UIViewController,UITableViewDataSource {
        
         cell.userScore.text=String(user.score)
        
+        cell.buttonTappedClosure = { [weak self] in
+                   self?.handleButtonTap(for: user)
+               }
+               
+        cell.configure(with: user)
+        
+        
         return cell
+    }
+    func handleButtonTap(for player: Player) {
+            // Access the 'player' object and perform actions here
+        print("Button tapped for player: \(player.loss_count)")
+          
+    }
+    // Implement the protocol method to handle the button tap
+        func didTapButton(for player: Player) {
+            // Here you can navigate to the new page and send data
+            performSegue(withIdentifier: "ShowPlayerFavs", sender: player)
+        }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowPlayerDetails",
+                   let indexPath = UserTableView.indexPathForSelectedRow,
+                   let destinationVC = segue.destination as? PlayerDetailViewController {
+                    let user: Player
+                    if searching {
+                        user = searchedPlayer[indexPath.row]
+                    } else {
+                        user = playerList[indexPath.row]
+                    }
+                    destinationVC.selectedPlayer = user
+                }
+        if segue.identifier == "ShowPlayerFavs",
+              let destinationVC = segue.destination as? FavoriteViewController,
+              let player = sender as? Player {
+               destinationVC.selectedPlayer = player
+           }
     }
 
    
