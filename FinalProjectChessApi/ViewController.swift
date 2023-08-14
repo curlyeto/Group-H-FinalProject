@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController,UITableViewDataSource {
     @IBOutlet weak var UserTableView: UITableView!
@@ -13,9 +14,19 @@ class ViewController: UIViewController,UITableViewDataSource {
     var playerList: [Player] = []
     var searchedPlayer: [Player] = []
     var searching = false
+    var favList: [Favorite] = []
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.searchBar.showsCancelButton = true
+    
+        self.showAll()
+        
+       
+        
+        
+        
         Task {
             do {
                 let dogdexResponse = try await ChessAPI_Helper.fetchLedearBoards()
@@ -29,7 +40,32 @@ class ViewController: UIViewController,UITableViewDataSource {
             }
         }
     }
-   
+    func showAll(){
+        do{
+            favList = try context.fetch(Favorite.fetchRequest())
+            print("Fav item list \(favList.count)")
+        }
+        catch{
+            
+        }
+    }
+    
+    func addFavorite(player_id:Int){
+       
+        
+        let newItem=Favorite(context: context)
+        newItem.player_id = Int64(player_id)
+        do{
+            try context.save()
+            self.showAll()
+            self.showToast(message: "Favorite Added", font: .systemFont(ofSize: 15.0),color: UIColor.green)
+        }
+        catch{
+            
+        }
+     
+       
+    }
     
     
 
@@ -73,12 +109,21 @@ class ViewController: UIViewController,UITableViewDataSource {
     func handleButtonTap(for player: Player) {
             // Access the 'player' object and perform actions here
         print("Button tapped for player: \(player.loss_count)")
-          
+        let status = checkStatus(player_id: player.player_id)
+        if(status == true){
+            return ;
+        }
+        addFavorite(player_id: player.player_id)
+    }
+    func checkStatus(player_id: Int) -> Bool {
+        return favList.contains { fav in
+            return fav.player_id == Int64(player_id)
+        }
     }
     // Implement the protocol method to handle the button tap
         func didTapButton(for player: Player) {
             // Here you can navigate to the new page and send data
-            performSegue(withIdentifier: "ShowPlayerFavs", sender: player)
+            performSegue(withIdentifier: "ShowPlayerFavs", sender: self)
         }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ShowPlayerDetails",
@@ -92,11 +137,25 @@ class ViewController: UIViewController,UITableViewDataSource {
                     }
                     destinationVC.selectedPlayer = user
                 }
-        if segue.identifier == "ShowPlayerFavs",
-              let destinationVC = segue.destination as? FavoriteViewController,
-              let player = sender as? Player {
-               destinationVC.selectedPlayer = player
-           }
+     
+    }
+    func showToast(message : String, font: UIFont, color:UIColor) {
+        
+        let toastLabel = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - 75, y: self.view.frame.size.height-100, width: 150, height: 35))
+        toastLabel.backgroundColor = color.withAlphaComponent(1)
+        toastLabel.textColor = UIColor.white
+        toastLabel.font = font
+        toastLabel.textAlignment = .center;
+        toastLabel.text = message
+        toastLabel.alpha = 1.0
+        toastLabel.layer.cornerRadius = 10;
+        toastLabel.clipsToBounds  =  true
+        self.view.addSubview(toastLabel)
+        UIView.animate(withDuration: 6.0, delay: 0.1, options: .curveEaseOut, animations: {
+            toastLabel.alpha = 0.0
+        }, completion: {(isCompleted) in
+            toastLabel.removeFromSuperview()
+        })
     }
 
    

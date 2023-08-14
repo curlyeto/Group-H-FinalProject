@@ -32,6 +32,9 @@ class LeaderBoardTableCell : UITableViewCell {
             // ... Configure other cell UI elements ...
     }
     
+    @IBAction func favButtonTapped(_ sender: Any) {
+        buttonTappedClosure?()
+    }
     
     func displayDogImage(with url: URL) {
         // Perform image loading asynchronously on a global background queue
