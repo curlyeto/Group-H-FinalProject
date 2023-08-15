@@ -488,6 +488,8 @@
 				DEVELOPMENT_TEAM = G899KXKH8Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FinalProjectChessApi/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Chess Master";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.board-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -516,6 +518,8 @@
 				DEVELOPMENT_TEAM = G899KXKH8Z;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FinalProjectChessApi/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Chess Master";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.board-games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

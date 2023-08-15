@@ -21,7 +21,7 @@ class FavoriteViewController: UIViewController,UITableViewDataSource {
         Task {
             do {
                 let dogdexResponse = try await ChessAPI_Helper.fetchLedearBoards()
-                var list = dogdexResponse.daily
+                let list = dogdexResponse.daily
                 favList.forEach{fav in
                     print("Player id in fav list \(fav.player_id)")
                     list.forEach{player in
